@@ -1,0 +1,88 @@
+﻿{
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:37558",
+      "sslPort": 44361
+    }
+  },
+  "profiles": {
+    "http": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "applicationUrl": "http://localhost:5003",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  },
+  "IdentityServiceUrl": "http://localhost:5000",
+  "ReverseProxy": {
+    "Routes": {
+      "auctionsRead": {
+        "ClusterId": "auctions",
+        "Match": {
+          "Path": "/auctions/{**catch-all}",
+          "Method": [
+            "GET"
+          ],
+        },
+        "Transform": [
+          {
+            "PathPattern": "api/auctions/{**catch-al1l}"
+          }
+        ]
+      },
+      "auctionsWrite": {
+        "ClusterId": "auctions",
+        "AuthorizationPlolicy": "default",
+        "Match": {
+          "Path": "/auctions/{**catch-all}",
+          "Method": [
+            "POST",
+            "PUT",
+            "DELETE"
+          ],
+        },
+        "Transform": [
+          {
+            "PathPattern": "api/auctions/{**catch-all}"
+          }
+        ]
+      },
+      "search": {
+        "ClusterId": "search",
+        "Match": {
+          "Path": "/search/{**catch-all}",
+          "Method": [
+            "GET"
+          ],
+        },
+        "Transform": [
+          {
+            "PathPattern": "api/search/{**catch-all}"
+          }
+        ]
+      }
+    },
+    "Clusters": {
+      "auctions": {
+        "Destinations": {
+          "auctionsApi": {
+            "Address": "https://localhost:5001"
+          }
+        }
+      },
+      "search": {
+        "Destinations": {
+          "searchApi": {
+            "Address": "https://localhost:5002"
+          }
+        }
+      }
+    }
+  }
+}
